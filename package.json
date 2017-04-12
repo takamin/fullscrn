@@ -1,0 +1,16 @@
+{
+  "name": "fullscrn",
+  "version": "0.0.1",
+  "description": "Fullscreen API",
+  "main": "fullscrn.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "fullscreen",
+    "html5",
+    "SPA"
+  ],
+  "author": "vzg03566@gmail.com",
+  "license": "MIT"
+}
