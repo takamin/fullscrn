@@ -1,6 +1,6 @@
 {
   "name": "fullscrn",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Fullscreen API",
   "main": "fullscrn.js",
   "scripts": {
@@ -12,5 +12,10 @@
     "SPA"
   ],
   "author": "vzg03566@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takamin/fullscrn.git"
+  },
+  "homepage": "https://github.com/takamin/fullscrn#readme"
 }
