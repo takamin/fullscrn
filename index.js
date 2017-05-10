@@ -16,7 +16,7 @@
      * There is no instance method.
      * @constructor
      */
-    var FullscreenAPI = function() {}
+    var Fullscreen = function() {}
 
     /**
      * Indicates the state that Fullscreen API is available.
@@ -25,7 +25,7 @@
      *
      * @type {?bool}
      */
-    FullscreenAPI.enabled = null;
+    Fullscreen.enabled = null;
 
     /**
      * References to the full screen element
@@ -34,7 +34,7 @@
      *
      * @type {?Element}
      */
-    FullscreenAPI.element = null;
+    Fullscreen.element = null;
 
     /**
      * Requests to the element to be full screen.
@@ -44,7 +44,7 @@
      * @param {!Element} element The element to expand.
      * @returns {undefined}
      */
-    FullscreenAPI.request = function(element) {
+    Fullscreen.request = function(element) {
         console.warn("Waiting requestFullscreen implementation.");
         element.requestFullscreen();
     };
@@ -56,7 +56,7 @@
      *
      * @returns {undefined}
      */
-    FullscreenAPI.exit = function() {
+    Fullscreen.exit = function() {
         console.warn("Waiting exitFullscreen implementation");
         document.exitFullscreen();
     };
@@ -64,10 +64,10 @@
     /*
      * no standard properties
      */
-    FullscreenAPI.fullscreen = null;
-    FullscreenAPI.fullScreen = null;
-    FullscreenAPI.isFullscreen = null;
-    FullscreenAPI.isFullScreen = null;
+    Fullscreen.fullscreen = null;
+    Fullscreen.fullScreen = null;
+    Fullscreen.isFullscreen = null;
+    Fullscreen.isFullScreen = null;
 
     /**
      * Change debugging mode
@@ -77,7 +77,7 @@
      *      the current status is returned,
      *      otherwise undefined.
      */
-    FullscreenAPI.debugMode = function(enabled) {
+    Fullscreen.debugMode = function(enabled) {
         if(enabled == null) {
             return _debugMode;
         }
@@ -86,10 +86,10 @@
     };
 
     try {
-        module.exports = FullscreenAPI;
+        module.exports = Fullscreen;
     } catch (err) { /* ignore */ }
 
-    GLOBAL.FullscreenAPI = FullscreenAPI;
+    GLOBAL.Fullscreen = Fullscreen;
 
 
     /*
@@ -99,7 +99,7 @@
     (function() {
 
         var d = document;
-        var api = FullscreenAPI;
+        var api = Fullscreen;
         var $ = (function() {
             try { return require("./lib/document-ready"); }
             catch(err) { /* ignore the error */ }
@@ -145,7 +145,7 @@
                 ]);
                 return (value == null) ? false : value;
             }());
-            Log.d("FullScreenAPI.enabled:", api.enabled);
+            Log.d("Fullscreen.enabled:", api.enabled);
 
             var updateProperty = function(event) {
 
@@ -157,10 +157,10 @@
                         "webkitFullscreenElement",
                         "mozFullScrennElement"
                     ]);
-                    Log.d("Updates FullscreenAPI.element to ", value);
+                    Log.d("Updates Fullscreen.element to ", value);
                     return value;
                 }());
-                Log.d("FullScreenAPI.element:", api.element);
+                Log.d("Fullscreen.element:", api.element);
 
 
                 api.fullscreen =
@@ -176,10 +176,10 @@
                     if(value == null) {
                         value = (api.element != null);
                     }
-                    Log.d("Updates FullscreenAPI.fullscreen to ", value);
+                    Log.d("Updates Fullscreen.fullscreen to ", value);
                     return value;
                 }());
-                Log.d("FullScreenAPI.isFullscreen:", api.isFullscreen);
+                Log.d("Fullscreen.isFullscreen:", api.isFullscreen);
             };
             d.addEventListener("fullscreenchange", updateProperty);
             d.addEventListener("webkitfullscreenchange", updateProperty);
@@ -207,8 +207,10 @@
 
             api.exit = (function() {
                 var method = getMethod(Document, [
+                    "exitFullscreen",
+                    "exitFullScreen",
                     "webkitCancelFullScreen",
-                    "mozCancelFullScrenn"
+                    "mozCancelFullScreen"
                 ]);
                 if(method == null) {
                     return function() {

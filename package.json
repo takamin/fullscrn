@@ -1,6 +1,6 @@
 {
   "name": "fullscrn",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Fullscreen API",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "html5",
     "SPA"
   ],
-  "author": "vzg03566@gmail.com",
+  "author": "Koji Takami <vzg03566@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
