@@ -26,8 +26,6 @@ SAMPLE
     <button type="button" id="exitButton"
          style="display:none;"
          onclick="exitFull();">Exit</button>
-    <script src="../lib/document-ready.js"></script>
-    <script src="../lib/web-dlog.js"></script>
     <script src="../fullscrn.js"></script>
     <script>
         function exitButton() {
