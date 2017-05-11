@@ -1,21 +1,50 @@
 {
   "name": "fullscrn",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Fullscreen API",
-  "main": "fullscrn.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublish": "grunt",
+    "test": "grunt lint && mocha"
   },
   "keywords": [
     "fullscreen",
     "html5",
     "SPA"
   ],
-  "author": "vzg03566@gmail.com",
+  "author": "Koji Takami <vzg03566@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/takamin/fullscrn.git"
   },
-  "homepage": "https://github.com/takamin/fullscrn#readme"
+  "homepage": "https://github.com/takamin/fullscrn#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^2.3.0",
+    "grunt-eslint": "^19.0.0",
+    "load-grunt-tasks": "^3.5.2",
+    "mocha": "^3.3.0"
+  },
+  "browser": {
+    "web-dlog": "./lib/web-dlog.js",
+    "document-ready": "./lib/document-ready.js"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "mocha": true
+    },
+    "globals": {},
+    "rules": {
+      "no-console": "off",
+      "valid-jsdoc": "warn"
+    },
+    "extends": "eslint:recommended"
+  },
+  "dependencies": {}
 }
