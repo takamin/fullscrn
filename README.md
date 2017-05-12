@@ -2,18 +2,92 @@ Fullscrn
 ========
 
 Fullscreen API.
+This module injects APIs to the DOM.
+So, you don't have to consider about the prefix such as 'moz' or 'webkit'.
+
+The implementation follows the standard specification at
+[Fullscreen API - WHATWG](https://fullscreen.spec.whatwg.org/).
+But it's not so certainly.
+So the methods do not returns a `promise` object.
 
 FILES
 -----
 
 * fullscrn.js - The script to include by script tag.
-In this case, 'Fullscreen' is available(see the sample below).
 * fullscrn.min.js - Minified one.
 * index.js - The source file of this module.
 This can be import using browserify.
 
-APIs
-----
+
+APIs Injected to DOM
+--------------------
+
+### Methods
+
+* Element.requestFullscreen()
+* Document.exitFullscreen()
+
+### Events
+
+* Document.fullscreenchange
+* Document.fullscreenerror
+
+### SAMPLE
+
+__[sample/injected.html](sample/injected.html)__
+
+```html
+<body onload="main();">
+    <button type="button"
+        onclick="requestFull();">Fullscreen</button>
+    <button type="button" id="exitButton"
+         style="display:none;"
+         onclick="exitFull();">Exit</button>
+    <script src="../fullscrn.js"></script>
+    <script>
+        Fullscreen.debugMode(true);// Enables debug log
+
+        var exitButton = null;
+
+        function main() {
+            exitButton = document.getElementById("exitButton");
+
+            // Handle change event
+            document.addEventListener("fullscreenchange",
+                function() { console.log("FULLSCREEN CHANGE"); });
+
+            // Handle error event
+            document.addEventListener("fullscreenerror",
+                function() { console.log("FULLSCREEN ERROR"); });
+
+            // This should be error
+            exitButton.requestFullscreen();
+
+        }
+
+        // Request fullscreen
+        function requestFull() {
+            exitButton.style.display = "block";
+            exitButton.requestFullscreen();
+        }
+
+        // Exit fullscreen
+        function exitFull() {
+            exitButton.style.display = "none";
+            document.exitFullscreen();
+        }
+
+    </script>
+</body>
+
+```
+
+
+Exported APIs (according to the convention of Node.js)
+------------------------------------------------------
+
+If this module was included by script tag, the global object 'Fullscreen'
+is available (see the `sample/sample.html` below).
 
 ### Properties
 
@@ -25,8 +99,10 @@ APIs
 * Fullscreen.request(element) - enter full screen mode with the element.
 * Fullscreen.exit(): exit full screen mode.
 
-SAMPLE
-------
+
+### SAMPLE
+
+__[sample/sample.html](sample/sample.html)__
 
 ```html
 <body>

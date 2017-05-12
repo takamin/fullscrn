@@ -135,58 +135,149 @@
 
         $(function() {
 
+            //
+            // Determine fullscreenEnabled
+            //
             api.enabled = (function() {
                 var value = getProp([
-                    "fullscreenEnabled",
-                    "fullScreenEnabled",
                     "webkitFullscreenEnabled",
                     "webkitFullScreenEnabled",
-                    "mozFullScreenEnabled"
+                    "mozFullScreenEnabled",
+                    "fullscreenEnabled"
                 ]);
                 return (value == null) ? false : value;
             }());
             Log.d("Fullscreen.enabled:", api.enabled);
 
-            var updateProperty = function(event) {
-
-                Log.d("updateFullscreenElement: event.type:", event.type);
-
-                api.element =
-                (function() {
-                    var value = getProp([
-                        "webkitFullscreenElement",
-                        "mozFullScrennElement"
-                    ]);
-                    Log.d("Updates Fullscreen.element to ", value);
-                    return value;
-                }());
-                Log.d("Fullscreen.element:", api.element);
+            // Inject Document.fullscreenEnabled
+            if(!("fullscreenEnabled" in document)) {
+                d.fullscreenEnabled = api.enabled;
+            }
 
 
-                api.fullscreen =
-                api.fullScreen =
-                api.isFullscreen =
-                api.isFullScreen =
-                (function() {
-                    var value = getProp([
-                        "webkitIsFullScreen",
-                        "webkitIsFullscreen",
-                        "mozFullScreen"
-                    ]);
-                    if(value == null) {
-                        value = (api.element != null);
+            //
+            // Updates Document.fullscreenElement
+            //
+            (function() {
+                var injectElement = !("fullscreenElement" in d);
+                var injectFullscreen = !("fullscreen" in d);
+                var stdFullscreenchange = "fullscreenchange";
+                var firstFullscreenchange = null;
+
+                /**
+                 * The function to update `Document.fullscreenElement`.
+                 * This is invoked from the `fullscreenchange` event handler
+                 * @returns {undefined}
+                 */
+                var updateProperty = function() {
+                    api.element =
+                    (function() {
+                        var value = getProp([
+                            "webkitFullscreenElement",
+                            "mozFullScrennElement",
+                            "fullscreenElement"
+                        ]);
+                        Log.d("Updates Fullscreen.element to ", value);
+                        return value;
+                    }());
+                    Log.d("Fullscreen.element:", api.element);
+                    if(injectElement) {
+                        d.fullscreenElement = api.element;
                     }
-                    Log.d("Updates Fullscreen.fullscreen to ", value);
-                    return value;
-                }());
-                Log.d("Fullscreen.isFullscreen:", api.isFullscreen);
-            };
-            d.addEventListener("fullscreenchange", updateProperty);
-            d.addEventListener("webkitfullscreenchange", updateProperty);
-            d.addEventListener("mozfullscreenchange", updateProperty);
 
-            d.dispatchEvent(new Event("fullscreenchange"));
+                    /*
+                     * These members are available, but not standard.
+                     */
+                    api.fullscreen =
+                    api.fullScreen =
+                    api.isFullscreen =
+                    api.isFullScreen =
+                    (function() {
+                        var value = getProp([
+                            "webkitIsFullScreen",
+                            "webkitIsFullscreen",
+                            "mozFullScreen",
+                            "fullscreen"
+                        ]);
+                        if(value == null) {
+                            value = (api.element != null);
+                        }
+                        Log.d("Updates Fullscreen.fullscreen to ", value);
+                        return value;
+                    }());
+                    Log.d("Fullscreen.isFullscreen:", api.isFullscreen);
+                    if(injectFullscreen) {
+                        d.fullscreen = api.fullscreen;
+                    }
+                };
 
+                /**
+                 * fullscreenchange event handler
+                 * @param {Event} event a notified event
+                 * @returns {undefined}
+                 */
+                var onfullscreenchange = function(event) {
+
+                    Log.d("onfullscreenchange: event.type:", event.type);
+
+                    if(firstFullscreenchange == null) {
+                        firstFullscreenchange = event.type;
+                    } else if(event.type != firstFullscreenchange) {
+                        return;
+                    } else if(firstFullscreenchange != stdFullscreenchange) {
+                        if(event.type == stdFullscreenchange) {
+                            return;
+                        }
+                    }
+
+                    updateProperty();
+
+                    if(firstFullscreenchange != stdFullscreenchange) {
+                        d.dispatchEvent(new Event(stdFullscreenchange));
+                    }
+                };
+                d.addEventListener(stdFullscreenchange, onfullscreenchange);
+                d.addEventListener("webkitfullscreenchange", onfullscreenchange);
+                d.addEventListener("mozfullscreenchange", onfullscreenchange);
+                updateProperty();
+            }());
+
+            //
+            // fullscreenerror  event
+            //
+            (function() {
+                var stdFullscreenerror = "fullscreenerror";
+                var firstFullscreenerror = null;
+                /**
+                 * fullscreenerror event handler
+                 * @param {Event} event a notified event
+                 * @returns {undefined}
+                 */
+                var onfullscreenerror = function(event) {
+
+                    Log.d("onfullscreenerror: event.type:", event.type);
+
+                    if(firstFullscreenerror == null) {
+                        firstFullscreenerror = event.type;
+                    } else if(event.type != firstFullscreenerror) {
+                        return;
+                    } else if(firstFullscreenerror != stdFullscreenerror) {
+                        if(event.type == stdFullscreenerror) {
+                            return;
+                        }
+                    }
+                    if(firstFullscreenerror != stdFullscreenerror) {
+                        d.dispatchEvent(new Event(stdFullscreenerror));
+                    }
+                };
+                d.addEventListener(stdFullscreenerror, onfullscreenerror);
+                d.addEventListener("webkitfullscreenerror", onfullscreenerror);
+                d.addEventListener("mozfullscreenerror", onfullscreenerror);
+            }());
+
+            //
+            // Fullscreen.request()
+            //
             api.request = (function() {
                 var method = getMethod(Element, [
                     "requestFullscreen",
@@ -204,7 +295,19 @@
                 };
             }());
 
+            //
+            // Inject `Element.requestFullscreen`
+            //
+            if(!("requestFullscreen" in Element.prototype)) {
+                Element.prototype.requestFullscreen = function() {
+                    Log.d("This is an injected Element.requestFullscreen()");
+                    api.request(this);
+                };
+            }
 
+            //
+            // Fullscreen.exit()
+            //
             api.exit = (function() {
                 var method = getMethod(Document, [
                     "exitFullscreen",
@@ -218,11 +321,23 @@
                     };
                 }
                 return function() {
-                    method.call(document);
+                    method.call(d);
                 };
             }());
 
+            //
+            // Inject `Document.exitFullscreen`
+            //
+            if(!("exitFullscreen" in Document.prototype)) {
+                Document.prototype.exitFullscreen = function() {
+                    Log.d("This is an injected Document.exitFullscreen()");
+                    api.exit();
+                };
+            }
 
+            //
+            // Debug print members matching /fullscreen/i
+            //
             var logFullscreenMemberOf = function(cls) {
                 Object.keys(cls.prototype).forEach(function(key) {
                     if(key.match(/fullscreen/i)) {
