@@ -1,0 +1,43 @@
+<body onload="main();">
+    <button type="button"
+        onclick="requestFull();">Fullscreen</button>
+    <button type="button" id="exitButton"
+         style="display:none;"
+         onclick="exitFull();">Exit</button>
+    <script src="../fullscrn.js"></script>
+    <script>
+        Fullscreen.debugMode(true);// Enables debug log
+
+        var exitButton = null;
+
+        function main() {
+            exitButton = document.getElementById("exitButton");
+
+            // Handle change event
+            document.addEventListener("fullscreenchange",
+                function() { console.log("FULLSCREEN CHANGE"); });
+
+            // Handle error event
+            document.addEventListener("fullscreenerror",
+                function() { console.log("FULLSCREEN ERROR"); });
+
+            // This should be error
+            exitButton.requestFullscreen();
+
+        }
+
+        // Request fullscreen
+        function requestFull() {
+            exitButton.style.display = "block";
+            exitButton.requestFullscreen();
+        }
+
+        // Exit fullscreen
+        function exitFull() {
+            exitButton.style.display = "none";
+            document.exitFullscreen();
+        }
+
+    </script>
+</body>
+
