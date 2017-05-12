@@ -22,6 +22,12 @@ This can be import using browserify.
 APIs Injected to DOM
 --------------------
 
+### Properties
+
+* Document.fullscreenEnabled - The full screen API's availability.
+* Document.fullscreenElement - Indicates the full sized element.
+* Document.fullscreen - The equivalent value to (Document.fullscreenElement != null).
+
 ### Methods
 
 * Element.requestFullscreen()
