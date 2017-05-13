@@ -1,43 +1,51 @@
 <body onload="main();">
-    <button type="button"
-        onclick="requestFull();">Fullscreen</button>
-    <button type="button" id="exitButton"
-         style="display:none;"
-         onclick="exitFull();">Exit</button>
+    <button type="button" onclick="request1();">Full&gt;&gt;</button>
+    <span id="panel">
+        <button type="button" onclick="request2();">Full&gt;&gt;</button>
+        <button type="button" id="exitButton" onclick="exit();">&lt;&lt;Exit</button>
+    </span>
     <script src="../fullscrn.js"></script>
     <script>
+        var panel = document.getElementById("panel");
+        var exitButton = document.getElementById("exitButton");
         Fullscreen.debugMode(true);// Enables debug log
-
-        var exitButton = null;
-
         function main() {
-            exitButton = document.getElementById("exitButton");
-
             // Handle change event
             document.addEventListener("fullscreenchange",
-                function() { console.log("FULLSCREEN CHANGE"); });
+                function() {
+                    var fse = document.fullscreenElement;
+                    console.log("FULLSCREEN CHANGE: " +
+                        ((fse == null)? "(null)": "#" + fse.id));
+                });
 
             // Handle error event
             document.addEventListener("fullscreenerror",
                 function() { console.log("FULLSCREEN ERROR"); });
 
-            // This should be error
-            exitButton.requestFullscreen();
-
+            request1(); // This should be error
         }
-
-        // Request fullscreen
-        function requestFull() {
-            exitButton.style.display = "block";
-            exitButton.requestFullscreen();
+        function request1() {
+            panel.requestFullscreen().then(function(){
+                console.log("request1 done.");
+            }).catch(function(err) {
+                console.error(err.message);
+            });
         }
-
-        // Exit fullscreen
-        function exitFull() {
-            exitButton.style.display = "none";
-            document.exitFullscreen();
+        function request2() {
+            exitButton.requestFullscreen().then(function(){
+                console.log("request2 done.");
+            }).catch(function(err) {
+                console.error(err.message);
+            });
         }
-
+        function exit() {
+            document.exitFullscreen()
+            .then(function(){
+                console.log("exit done.");
+            }).catch(function(err) {
+                console.error(err.message);
+            });
+        }
     </script>
 </body>
 
