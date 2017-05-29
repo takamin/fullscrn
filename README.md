@@ -1,12 +1,17 @@
 Fullscrn
 ========
 
+<img src="https://github.com/takamin/fullscrn/blob/gh-pages/images/logo.png?raw=true"
+width="100%" style="max-width:900px"/>
+
 Fullscreen API.
 This module injects APIs to the DOM.
 So, you don't have to consider about the prefix such as 'moz' or 'webkit'.
 
 The implementation follows the standard specification at
 [Fullscreen API - WHATWG](https://fullscreen.spec.whatwg.org/).
+
+See also this [project page](https://takamin.github.io/fullscrn/).
 
 FILES
 -----
@@ -50,7 +55,7 @@ this module does not supoort the event handlers -
 
 ### SAMPLE
 
-__[sample/injected.html](sample/injected.html)__
+__[sample/injected.html](sample/injected.html)__ [[live sample]](https://takamin.github.io/fullscrn/sample/injected.html).
 
 ```html
 <body onload="main();">
@@ -128,7 +133,7 @@ is available (see the `sample/sample.html` below).
 
 ### SAMPLE
 
-__[sample/sample.html](sample/sample.html)__
+__[sample/sample.html](sample/sample.html)__ [[live sample]](https://takamin.github.io/fullscrn/sample/sample.html).
 
 ```html
 <body>
