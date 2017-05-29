@@ -1,3 +1,38 @@
+<style>
+body {
+    font-family: "times new roman", serif;
+    font-size:14pt;
+    max-width:800px;
+    background-color: #222;
+    color:#ccc;
+}
+h1 { font-size: 28pt; color: #0fe; text-align: center; text-decoration: underline; }
+h2 { font-size: 24pt; color: #fa3; border-bottom: solid 3px #da3;}
+h3 { font-size: 20pt; color: #fff; text-decoration: underline;}
+h4 { font-size: 18pt; }
+h5 { font-size: 16pt; }
+h6 { font-size: 14pt; }
+strong { color: #fff; }
+a {
+    color:#0fe;
+}
+code {
+    font-family: courier, sans-serif;
+    font-weight:bold;
+    color: #ddd;
+}
+pre {
+    font-family: courier, sans-serif;
+    margin: 1em 1em 1em 2em;
+    padding:1.2em;
+    font-size:12pt;
+    line-height:18pt;
+    background-color: #111;
+    color: #ddd;
+    overflow-x: scroll;
+}
+</style>
+
 Fullscrn
 ========
 
