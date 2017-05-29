@@ -1,0 +1,137 @@
+<h1 id="fullscrn">Fullscrn</h1>
+<p>Fullscreen API.
+This module injects APIs to the DOM.
+So, you don&#39;t have to consider about the prefix such as &#39;moz&#39; or &#39;webkit&#39;.</p>
+<p>The implementation follows the standard specification at
+<a href="https://fullscreen.spec.whatwg.org/">Fullscreen API - WHATWG</a>.</p>
+<h2 id="files">FILES</h2>
+<ul>
+<li>fullscrn.js - The script to include by script tag.</li>
+<li>fullscrn.min.js - Minified one.</li>
+<li>index.js - The source file of this module.
+This can be import using browserify.</li>
+</ul>
+<h2 id="apis-injected-to-dom">APIs Injected to DOM</h2>
+<h3 id="properties">Properties</h3>
+<ul>
+<li><strong>Document.fullscreenEnabled</strong> -
+The full screen API&#39;s availability.</li>
+<li><strong>Document.fullscreenElement</strong> -
+Indicates the full sized element.</li>
+<li><strong>Document.fullscreen</strong> -
+The equivalent value to (Document.fullscreenElement != null).</li>
+</ul>
+<h3 id="methods">Methods</h3>
+<p>These methods returns promise.</p>
+<ul>
+<li><strong>Element.requestFullscreen()</strong> -
+Requests the fullscreen mode with the element.</li>
+<li><strong>Document.exitFullscreen()</strong> -
+Cancels the fullscreen mode of the element that
+is set to fullscreen at the time.</li>
+</ul>
+<h3 id="events">Events</h3>
+<p>Use <code>document.addEventListener</code> to handle events while
+this module does not supoort the event handlers -
+<code>Document.onfullscreenchange</code> and onfullscreenerror.</p>
+<ul>
+<li><strong>Document <code>&quot;fullscreenchange&quot;</code></strong></li>
+<li><strong>Document <code>&quot;fullscreenerror&quot;</code></strong></li>
+</ul>
+<h3 id="sample">SAMPLE</h3>
+<p><strong><a href="sample/injected.html">sample/injected.html</a></strong></p>
+<pre><code class="lang-html">&lt;body onload=&quot;main();&quot;&gt;
+    &lt;button type=&quot;button&quot; onclick=&quot;request1();&quot;
+    &gt;Full&amp;gt;&amp;gt;&lt;/button&gt;
+    &lt;span id=&quot;panel&quot;&gt;
+        &lt;button type=&quot;button&quot; onclick=&quot;request2();&quot;
+        &gt;Full&amp;gt;&amp;gt;&lt;/button&gt;
+        &lt;button type=&quot;button&quot; id=&quot;exitButton&quot;
+        onclick=&quot;exit();&quot;&gt;&amp;lt;&amp;lt;Exit&lt;/button&gt;
+    &lt;/span&gt;
+    &lt;script src=&quot;../fullscrn.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var panel = document.getElementById(&quot;panel&quot;);
+        var exitButton = document.getElementById(&quot;exitButton&quot;);
+        Fullscreen.debugMode(true);// Enables debug log
+        function main() {
+            // Handle change event
+            document.addEventListener(&quot;fullscreenchange&quot;,
+                function() {
+                    var fse = document.fullscreenElement;
+                    console.log(&quot;FULLSCREEN CHANGE: &quot; +
+                        ((fse == null)? &quot;(null)&quot;: &quot;#&quot; + fse.id));
+                });
+
+            // Handle error event
+            document.addEventListener(&quot;fullscreenerror&quot;,
+                function() { console.log(&quot;FULLSCREEN ERROR&quot;); });
+
+            request1(); // This should be error
+        }
+        function request1() {
+            panel.requestFullscreen().then(function(){
+                console.log(&quot;request1 done.&quot;);
+            }).catch(function(err) {
+                console.error(err.message);
+            });
+        }
+        function request2() {
+            exitButton.requestFullscreen().then(function(){
+                console.log(&quot;request2 done.&quot;);
+            }).catch(function(err) {
+                console.error(err.message);
+            });
+        }
+        function exit() {
+            document.exitFullscreen()
+            .then(function(){
+                console.log(&quot;exit done.&quot;);
+            }).catch(function(err) {
+                console.error(err.message);
+            });
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+<h2 id="exported-apis-according-to-the-convention-of-node-js-">Exported APIs (according to the convention of Node.js)</h2>
+<p>If this module was included by script tag, the global object &#39;Fullscreen&#39;
+is available (see the <code>sample/sample.html</code> below).</p>
+<h3 id="properties">Properties</h3>
+<ul>
+<li>Fullscreen.enabled - indicates the fullscreen APIs are available.</li>
+<li>Fullscreen.element - references the fullscreen element or null.</li>
+</ul>
+<h3 id="methods">Methods</h3>
+<ul>
+<li>Fullscreen.request(element) - enter full screen mode with the element and returns a promise.</li>
+<li>Fullscreen.exit(): exit full screen mode and returns a promise.</li>
+</ul>
+<h3 id="sample">SAMPLE</h3>
+<p><strong><a href="sample/sample.html">sample/sample.html</a></strong></p>
+<pre><code class="lang-html">&lt;body&gt;
+    &lt;button type=&quot;button&quot;
+        onclick=&quot;requestFull();&quot;&gt;Fullscreen&lt;/button&gt;
+    &lt;button type=&quot;button&quot; id=&quot;exitButton&quot;
+         style=&quot;display:none;&quot;
+         onclick=&quot;exitFull();&quot;&gt;Exit&lt;/button&gt;
+    &lt;script src=&quot;../fullscrn.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+        function exitButton() {
+            return document.getElementById(&quot;exitButton&quot;);
+        }
+        function requestFull() {
+            var btn = exitButton();
+            btn.style.display = &quot;block&quot;;
+            Fullscreen.request(btn);
+        }
+        function exitFull() {
+            var btn = exitButton();
+            btn.style.display = &quot;none&quot;;
+            Fullscreen.exit();
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+<h2 id="license">LICENSE</h2>
+<p>This software is released under the MIT License, see <a href="LICENSE">LICENSE</a></p>

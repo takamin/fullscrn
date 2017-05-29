@@ -21,11 +21,19 @@ module.exports = function(grunt) {
                 './lib/web-dlog.js',
                 './lib/document-ready.js'
             ]
+        },
+        md2html: {
+            build: {
+                files: {
+                    "./index.html" : [ "./README.md" ]
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks("grunt-browserify");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.registerTask('lint', [ "eslint"]);
-    grunt.registerTask("default", [ "lint", "browserify", "uglify" ]);
+    grunt.loadNpmTasks('grunt-md2html');
+    grunt.registerTask("default", [ "lint", "browserify", "uglify", "md2html" ]);
 };

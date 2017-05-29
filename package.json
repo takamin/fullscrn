@@ -46,5 +46,7 @@
     },
     "extends": "eslint:recommended"
   },
-  "dependencies": {}
+  "dependencies": {
+    "grunt-md2html": "^0.3.1"
+  }
 }
