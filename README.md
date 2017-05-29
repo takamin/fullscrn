@@ -1,6 +1,9 @@
 Fullscrn
 ========
 
+<img src="https://github.com/takamin/fullscrn/blob/gh-pages/images/logo.png?raw=true"
+width="100%" style="max-width:900px"/>
+
 Fullscreen API.
 This module injects APIs to the DOM.
 So, you don't have to consider about the prefix such as 'moz' or 'webkit'.
