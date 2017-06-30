@@ -13,6 +13,20 @@ The implementation follows the standard specification at
 
 See also this [project page](https://takamin.github.io/fullscrn/).
 
+INSTALLATION
+------------
+
+```bash
+$ npm install --save fullscrn
+```
+
+REPOSITORY
+----------
+
+* [npm](https://www.npmjs.com/package/fullscrn)
+* [GitHub](https://github.com/takamin/fullscrn) ([gh-pages](https://takamin.github.io/fullscrn))
+
+
 FILES
 -----
 
@@ -114,8 +128,8 @@ __[sample/injected.html](sample/injected.html)__ [[live sample]](https://takamin
 ```
 
 
-Exported APIs (according to the convention of Node.js)
-------------------------------------------------------
+Exported APIs
+-------------
 
 If this module was included by script tag, the global object 'Fullscreen'
 is available (see the `sample/sample.html` below).
