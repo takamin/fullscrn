@@ -39,7 +39,8 @@ Fullscrn
 <img src="https://github.com/takamin/fullscrn/blob/gh-pages/images/logo.png?raw=true"
 width="100%" style="max-width:900px"/>
 
-Fullscreen API.
+This is a polyfill of the WHATWG Fullscreen API. The APIs return a Promise object and all events can be used.
+
 This module injects APIs to the DOM.
 So, you don't have to consider about the prefix such as 'moz' or 'webkit'.
 
