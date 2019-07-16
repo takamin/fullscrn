@@ -30,7 +30,6 @@
     "mocha": "^6.1.4"
   },
   "browser": {
-    "web-dlog": "./lib/web-dlog.js",
     "document-ready": "./lib/document-ready.js"
   },
   "eslintConfig": {
@@ -46,5 +45,7 @@
     },
     "extends": "eslint:recommended"
   },
-  "dependencies": {}
+  "dependencies": {
+    "debug": "^4.1.1"
+  }
 }

@@ -3,13 +3,7 @@
 
     var GLOBAL = Function("return this;")();
 
-    var WebDLog = (function() {
-        try { return require("web-dlog"); }
-        catch(e) { /*ignore*/ }
-        return GLOBAL.WebDLog;
-    }());
-    var _debugMode = false;
-    var Log = WebDLog.logger().debug( _debugMode );
+    var debug = require("debug")("fullscrn");
 
     /**
      * The class to be exported.
@@ -71,22 +65,6 @@
     Fullscreen.isFullscreen = null;
     Fullscreen.isFullScreen = null;
 
-    /**
-     * Change debugging mode
-     * @param {?bool} enabled enabled or not
-     * @returns {bool|undefined}
-     *      If the argument is not set,
-     *      the current status is returned,
-     *      otherwise undefined.
-     */
-    Fullscreen.debugMode = function(enabled) {
-        if(enabled == null) {
-            return _debugMode;
-        }
-        _debugMode = enabled;
-        Log.debug(enabled);
-    };
-
     try {
         module.exports = Fullscreen;
     } catch (err) { /* ignore */ }
@@ -113,12 +91,12 @@
             for(var i = 0; i < names.length; i++) {
                 var name = names[i];
                 if(name in cls.prototype) {
-                    Log.d("The class " + cls.name + " has a method " + name + ".");
+                    debug("The class " + cls.name + " has a method " + name + ".");
                     return cls.prototype[name];
                 }
-                Log.d("The class " + cls.name + " does not have a method " + name + ".");
+                debug("The class " + cls.name + " does not have a method " + name + ".");
             }
-            Log.d("The class " + cls.name + " does not have a method " + names.join(',') + " at all.");
+            debug("The class " + cls.name + " does not have a method " + names.join(',') + " at all.");
             return null;
         };
 
@@ -126,12 +104,12 @@
             for(var i = 0; i < names.length; i++) {
                 var name = names[i];
                 if(name in d) {
-                    Log.d("The document has a property " + name + ".");
+                    debug("The document has a property " + name + ".");
                     return name;
                 }
-                Log.d("The document does not have a property " + name + ".");
+                debug("The document does not have a property " + name + ".");
             }
-            Log.d("The document does not have a property " + names.join(',') + " at all.");
+            debug("The document does not have a property " + names.join(',') + " at all.");
             return null;
         };
 
@@ -145,7 +123,7 @@
             var logFullscreenMemberOf = function(cls) {
                 Object.keys(cls.prototype).forEach(function(key) {
                     if(key.match(/fullscreen/i)) {
-                        Log.d("Found " + cls.name + ".prototype." + key);
+                        debug("Found " + cls.name + ".prototype." + key);
                     }
                 });
             };
@@ -165,7 +143,7 @@
                 var value = (name==null)? false : d[name];
                 return value;
             }());
-            Log.d("Fullscreen.enabled:", api.enabled);
+            debug("Fullscreen.enabled:", api.enabled);
 
             // Inject Document.fullscreenEnabled
             if(!("fullscreenEnabled" in document)) {
@@ -202,13 +180,13 @@
                     (function() {
                         var value = (nameFullscreenElement == null) ?
                             null : d[nameFullscreenElement];
-                        Log.d("Updates Fullscreen.element to " + value);
+                        debug("Updates Fullscreen.element to " + value);
                         return value;
                     }());
-                    Log.d("Fullscreen.element: " + api.element);
+                    debug("Fullscreen.element: " + api.element);
                     if(injectElement) {
                         d.fullscreenElement = api.element;
-                        Log.d("Document.fullscreenElement:" + d.fullscreenElement);
+                        debug("Document.fullscreenElement:" + d.fullscreenElement);
                     }
 
                     /*
@@ -221,13 +199,13 @@
                     (function() {
                         var value = (nameFullscreen == null)?
                             (api.element != null): d[nameFullscreen];
-                        Log.d("Updates Fullscreen.fullscreen to ", value);
+                        debug("Updates Fullscreen.fullscreen to ", value);
                         return value;
                     }());
-                    Log.d("Fullscreen.fullscreen:", api.fullscreen);
+                    debug("Fullscreen.fullscreen:", api.fullscreen);
                     if(injectFullscreen) {
                         d.fullscreen = api.fullscreen;
-                        Log.d("Document.fullscreen:", d.fullscreen);
+                        debug("Document.fullscreen:", d.fullscreen);
                     }
                 };
 
@@ -246,7 +224,7 @@
 
                         if(implementedType == null) {
                             implementedType = event.type;
-                            Log.d("implemented", standardType + ":", implementedType);
+                            debug("implemented", standardType + ":", implementedType);
                         } else if(event.type != implementedType) {
                             return;
                         }
@@ -254,7 +232,7 @@
                         updateProperty();
 
                         if(implementedType != standardType) {
-                            Log.d("Route event", event.type, "to", standardType);
+                            debug("Route event", event.type, "to", standardType);
                             d.dispatchEvent(new Event(standardType));
                         }
 
@@ -284,12 +262,12 @@
 
                     if(implementedType == null) {
                         implementedType = event.type;
-                        Log.d("implemented", standardType + ":", implementedType);
+                        debug("implemented", standardType + ":", implementedType);
                     } else if(event.type != implementedType) {
                         return;
                     }
                     if(implementedType != standardType) {
-                        Log.d("Route event", event.type, "to", standardType);
+                        debug("Route event", event.type, "to", standardType);
                         d.dispatchEvent(new Event(standardType));
                     }
 
@@ -308,26 +286,26 @@
                 return new Promise(function(resolve, reject) {
                     try {
                         if(callbackChange != null) {
-                            Log.d("an unresolved request exists");
+                            debug("an unresolved request exists");
                             reject(new Error("an unresolved request exists"));
                         } else {
                             callbackChange = function(err, data) {
                                 if(err) {
-                                    Log.d("Promise rejected.");
+                                    debug("Promise rejected.");
                                     reject(err);
                                 } else {
-                                    Log.d("Promise resolved.");
+                                    debug("Promise resolved.");
                                     resolve(data);
                                 }
                             };
                             var promise = requestPromise();
                             if(promise != null) {
-                                Log.d("API returns Promise");
+                                debug("API returns Promise");
                                 promise.then(function(){
-                                    Log.d("Promise that API returns resolved.");
+                                    debug("Promise that API returns resolved.");
                                     resolve();
                                 }).catch(function(err) {
-                                    Log.d("Promise that API returns rejected.");
+                                    debug("Promise that API returns rejected.");
                                     reject(err);
                                 });
                             }
@@ -353,7 +331,7 @@
                     };
                 }
                 return function(element) {
-                    Log.d("Fullscreen.request:", element);
+                    debug("Fullscreen.request:", element);
                     return runFullscreenRequest(function() {
                         return method.call(element);
                     });
@@ -364,9 +342,9 @@
             // Inject `Element.requestFullscreen`
             //
             if(!("requestFullscreen" in Element.prototype)) {
-                Log.d("Inject Element.requestFullscreen()");
+                debug("Inject Element.requestFullscreen()");
                 Element.prototype.requestFullscreen = function() {
-                    Log.d("This is an injected Element.requestFullscreen()");
+                    debug("This is an injected Element.requestFullscreen()");
                     return api.request(this);
                 };
             }
@@ -387,7 +365,7 @@
                     };
                 }
                 return function() {
-                    Log.d("Fullscreen.exit:", api.element);
+                    debug("Fullscreen.exit:", api.element);
                     if(api.element == null) {
                         return new Promise(function(resolve, reject) {
                             reject(new Error("Fullscreen.element not exists"));
@@ -404,9 +382,9 @@
             // Inject `Document.exitFullscreen`
             //
             if(!("exitFullscreen" in Document.prototype)) {
-                Log.d("Inject Document.exitFullscreen()");
+                debug("Inject Document.exitFullscreen()");
                 Document.prototype.exitFullscreen = function() {
-                    Log.d("This is an injected Document.exitFullscreen()");
+                    debug("This is an injected Document.exitFullscreen()");
                     return api.exit();
                 };
             }

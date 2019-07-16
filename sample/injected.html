@@ -4,11 +4,13 @@
         <button type="button" onclick="request2();">Full&gt;&gt;</button>
         <button type="button" id="exitButton" onclick="exit();">&lt;&lt;Exit</button>
     </span>
+    <script>
+        localStorage.debug = "fullscrn";
+    </script>
     <script src="../fullscrn.js"></script>
     <script>
         var panel = document.getElementById("panel");
         var exitButton = document.getElementById("exitButton");
-        Fullscreen.debugMode(true);// Enables debug log
         function main() {
             // Handle change event
             document.addEventListener("fullscreenchange",
@@ -22,6 +24,9 @@
             document.addEventListener("fullscreenerror",
                 function() { console.log("FULLSCREEN ERROR"); });
 
+            console.warn(
+                "Following lines should indicate an error as " +
+                "'API can only be initiated by a user gesture.'");
             request1(); // This should be error
         }
         function request1() {
