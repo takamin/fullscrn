@@ -1,16 +1,14 @@
 (function() {
     "use strict";
 
-    var GLOBAL = Function("return this;")();
-
-    var debug = require("debug")("fullscrn");
+    const debug = require("debug")("fullscrn");
 
     /**
      * The class to be exported.
      * There is no instance method.
      * @constructor
      */
-    var Fullscreen = function() {}
+    const Fullscreen = function() {}
 
     /**
      * Indicates the state that Fullscreen API is available.
@@ -68,9 +66,8 @@
     try {
         module.exports = Fullscreen;
     } catch (err) { /* ignore */ }
-
+    const GLOBAL = Function("return this;")();
     GLOBAL.Fullscreen = Fullscreen;
-
 
     /*
      * Search APIs
@@ -78,18 +75,13 @@
 
     (function() {
 
-        var d = document;
-        var api = Fullscreen;
-        var $ = (function() {
-            try { return require("./lib/document-ready"); }
-            catch(err) { /* ignore the error */ }
-            return ("DocumentReady" in GLOBAL) ?
-                GLOBAL.DocumentReady : (function(func) { func(); });
-        }());
+        const d = document;
+        const api = Fullscreen;
+        const DocumentReady = require("./lib/document-ready");
 
-        var getMethod = function(cls, names) {
-            for(var i = 0; i < names.length; i++) {
-                var name = names[i];
+        const getMethod = function(cls, names) {
+            for(let i = 0; i < names.length; i++) {
+                const name = names[i];
                 if(name in cls.prototype) {
                     debug("The class " + cls.name + " has a method " + name + ".");
                     return cls.prototype[name];
@@ -100,9 +92,9 @@
             return null;
         };
 
-        var getPropName = function(names) {
-            for(var i = 0; i < names.length; i++) {
-                var name = names[i];
+        const getPropName = function(names) {
+            for(let i = 0; i < names.length; i++) {
+                const name = names[i];
                 if(name in d) {
                     debug("The document has a property " + name + ".");
                     return name;
@@ -113,14 +105,14 @@
             return null;
         };
 
-        $(function() {
+        DocumentReady(function() {
 
-            var callbackChange = null;
+            let callbackChange = null;
 
             //
             // Debug print members matching /fullscreen/i
             //
-            var logFullscreenMemberOf = function(cls) {
+            const logFullscreenMemberOf = function(cls) {
                 Object.keys(cls.prototype).forEach(function(key) {
                     if(key.match(/fullscreen/i)) {
                         debug("Found " + cls.name + ".prototype." + key);
@@ -133,16 +125,15 @@
             //
             // Determine fullscreenEnabled
             //
-            api.enabled = (function() {
-                var name = getPropName([
+            {
+                const name = getPropName([
                     "fullscreenEnabled",
                     "webkitFullscreenEnabled",
                     "webkitFullScreenEnabled",
                     "mozFullScreenEnabled"
                 ]);
-                var value = (name==null)? false : d[name];
-                return value;
-            }());
+                api.enabled = (name==null) ? false : d[name];
+            }
             debug("Fullscreen.enabled:", api.enabled);
 
             // Inject Document.fullscreenEnabled
@@ -155,15 +146,15 @@
             // Updates Document.fullscreenElement and
             // Document.fullscreen by listening fullscreenchage event.
             //
-            (function() {
-                var injectElement = !("fullscreenElement" in d);
-                var injectFullscreen = !("fullscreen" in d);
-                var nameFullscreenElement = getPropName([
+            {
+                const injectElement = !("fullscreenElement" in d);
+                const injectFullscreen = !("fullscreen" in d);
+                const nameFullscreenElement = getPropName([
                     "fullscreenElement",
                     "webkitFullscreenElement",
                     "mozFullScreenElement"
                 ]);
-                var nameFullscreen = getPropName([
+                const nameFullscreen = getPropName([
                     "fullscreen",
                     "webkitIsFullScreen",
                     "webkitIsFullscreen",
@@ -175,14 +166,13 @@
                  * This is invoked from the `fullscreenchange` event handler
                  * @returns {undefined}
                  */
-                var updateProperty = function() {
-                    api.element =
-                    (function() {
-                        var value = (nameFullscreenElement == null) ?
+                const updateProperty = function() {
+                    {
+                        const value = (nameFullscreenElement == null) ?
                             null : d[nameFullscreenElement];
                         debug("Updates Fullscreen.element to " + value);
-                        return value;
-                    }());
+                        api.element = value;
+                    }
                     debug("Fullscreen.element: " + api.element);
                     if(injectElement) {
                         d.fullscreenElement = api.element;
@@ -192,16 +182,15 @@
                     /*
                      * These members are available, but not standard.
                      */
-                    api.fullscreen =
-                    api.fullScreen =
-                    api.isFullscreen =
-                    api.isFullScreen =
-                    (function() {
-                        var value = (nameFullscreen == null)?
+                    {
+                        const value = (nameFullscreen == null)?
                             (api.element != null): d[nameFullscreen];
                         debug("Updates Fullscreen.fullscreen to ", value);
-                        return value;
-                    }());
+                        api.fullscreen =
+                        api.fullScreen =
+                        api.isFullscreen =
+                        api.isFullScreen = value;
+                    }
                     debug("Fullscreen.fullscreen:", api.fullscreen);
                     if(injectFullscreen) {
                         d.fullscreen = api.fullscreen;
@@ -211,16 +200,16 @@
 
                 updateProperty(); // Initialize the properties
 
-                (function() {
-                    var standardType = "fullscreenchange";
-                    var implementedType = null;
+                {
+                    const standardType = "fullscreenchange";
+                    let implementedType = null;
 
                     /**
                      * fullscreenchange event handler
                      * @param {Event} event a notified event
                      * @returns {undefined}
                      */
-                    var onfullscreenchange = function(event) {
+                    const onfullscreenchange = function(event) {
 
                         if(implementedType == null) {
                             implementedType = event.type;
@@ -244,21 +233,21 @@
                     d.addEventListener(standardType, onfullscreenchange);
                     d.addEventListener("webkitfullscreenchange", onfullscreenchange);
                     d.addEventListener("mozfullscreenchange", onfullscreenchange);
-                }());
-            }());
+                }
+            }
 
             //
             // Route prefixed fullscreenerror event to standard
             //
-            (function() {
-                var standardType = "fullscreenerror";
-                var implementedType = null;
+            {
+                const standardType = "fullscreenerror";
+                let implementedType = null;
                 /**
                  * fullscreenerror event handler
                  * @param {Event} event a notified event
                  * @returns {undefined}
                  */
-                var onfullscreenerror = function(event) {
+                const onfullscreenerror = function(event) {
 
                     if(implementedType == null) {
                         implementedType = event.type;
@@ -279,10 +268,9 @@
                 d.addEventListener(standardType, onfullscreenerror);
                 d.addEventListener("webkitfullscreenerror", onfullscreenerror);
                 d.addEventListener("mozfullscreenerror", onfullscreenerror);
-            }());
+            }
 
-            var runFullscreenRequest = function(requestPromise) {
-                /* globals Promise */
+            const runFullscreenRequest = function(requestPromise) {
                 return new Promise(function(resolve, reject) {
                     try {
                         if(callbackChange != null) {
@@ -298,7 +286,7 @@
                                     resolve(data);
                                 }
                             };
-                            var promise = requestPromise();
+                            const promise = requestPromise();
                             if(promise != null) {
                                 debug("API returns Promise");
                                 promise.then(function(){
@@ -318,8 +306,8 @@
             //
             // Fullscreen.request()
             //
-            api.request = (function() {
-                var method = getMethod(Element, [
+            {
+                const method = getMethod(Element, [
                     "webkitRequestFullScreen",
                     "mozRequestFullScreen",
                     "requestFullScreen",
@@ -330,13 +318,13 @@
                         throw new Error("requestFullscreen() is not supported.");
                     };
                 }
-                return function(element) {
+                api.request = function(element) {
                     debug("Fullscreen.request:", element);
                     return runFullscreenRequest(function() {
                         return method.call(element);
                     });
                 };
-            }());
+            }
 
             //
             // Inject `Element.requestFullscreen`
@@ -352,8 +340,8 @@
             //
             // Fullscreen.exit()
             //
-            api.exit = (function() {
-                var method = getMethod(Document, [
+            {
+                const method = getMethod(Document, [
                     "webkitCancelFullScreen",
                     "mozCancelFullScreen",
                     "exitFullScreen",
@@ -364,7 +352,7 @@
                         throw new Error("Document.exitFullscreen() is not supported.");
                     };
                 }
-                return function() {
+                api.exit = function() {
                     debug("Fullscreen.exit:", api.element);
                     if(api.element == null) {
                         return new Promise(function(resolve, reject) {
@@ -376,7 +364,7 @@
                         return method.call(d);
                     });
                 };
-            }());
+            }
 
             //
             // Inject `Document.exitFullscreen`
