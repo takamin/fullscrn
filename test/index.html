@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>npm run test</title>
+        <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    </head>
+<body>
+<h1>npm run test</h1>
+
+<div id="mocha"></div>
+
+<button id="btnContinue" type="button" disabled>Continue test</button>
+
+<!-- mocha の読み込みとセットアップ -->
+<script src="../node_modules/mocha/mocha.js"></script>
+<script>
+    mocha.setup('bdd');
+    mocha.setup('tdd');
+</script>
+
+<!-- テストスクリプトを読み込む -->
+<script src="./bundle-fullscrn.test.js"></script>
+
+<!-- テストの実行 -->
+<script>
+    localStorage.debug = ""; //npm debug向けのデバッグログの設定。
+    mocha.run();
+</script>
+
+</body>
+</html>
