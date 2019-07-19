@@ -1,6 +1,6 @@
 {
   "name": "fullscrn",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Fullscreen API",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "keywords": [
     "fullscreen",
     "html5",
-    "SPA"
+    "polyfill"
   ],
   "author": "Koji Takami <vzg03566@gmail.com>",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "type": "git",
     "url": "git+https://github.com/takamin/fullscrn.git"
   },
-  "homepage": "https://github.com/takamin/fullscrn#readme",
+  "homepage": "https://takamints.hatenablog.jp/entry/wrapper-module-for-whatwg-full-screen-api",
   "devDependencies": {
     "chai": "^4.2.0",
     "grunt": "^1.0.4",
