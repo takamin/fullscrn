@@ -109,6 +109,25 @@
         return null;
     };
 
+    //
+    // Determine fullscreenEnabled
+    //
+    {
+        const name = getPropName([
+            "fullscreenEnabled",
+            "webkitFullscreenEnabled",
+            "webkitFullScreenEnabled",
+            "mozFullScreenEnabled"
+        ]);
+        Fullscreen.enabled = (name==null) ? false : d[name];
+        debug("Fullscreen.enabled:", Fullscreen.enabled);
+
+        // Inject Document.fullscreenEnabled
+        if(!("fullscreenEnabled" in document)) {
+            d.fullscreenEnabled = Fullscreen.enabled;
+        }
+    }
+
     /*
      * Search APIs
      */
@@ -128,25 +147,6 @@
         };
         try { logFullscreenMemberOf(Document); } catch(err) { /* nothing */ }
         try { logFullscreenMemberOf(Element);  } catch(err) { /* nothing */ }
-
-        //
-        // Determine fullscreenEnabled
-        //
-        {
-            const name = getPropName([
-                "fullscreenEnabled",
-                "webkitFullscreenEnabled",
-                "webkitFullScreenEnabled",
-                "mozFullScreenEnabled"
-            ]);
-            Fullscreen.enabled = (name==null) ? false : d[name];
-            debug("Fullscreen.enabled:", Fullscreen.enabled);
-
-            // Inject Document.fullscreenEnabled
-            if(!("fullscreenEnabled" in document)) {
-                d.fullscreenEnabled = Fullscreen.enabled;
-            }
-        }
 
         //
         // Updates Document.fullscreenElement and
