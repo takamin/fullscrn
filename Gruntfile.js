@@ -6,6 +6,12 @@ module.exports = function(grunt) {
                 files: {
                     "./fullscrn.js": [ "./index.js" ]
                 }
+            },
+            test: {
+                files: {
+                    "./test/bundle-fullscrn.test.js":
+                        [ "./test/fullscrn.test.js" ]
+                }
             }
         },
         uglify: {
@@ -25,7 +31,8 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks("grunt-browserify");
-    grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-contrib-uglify-es");
     grunt.registerTask('lint', [ "eslint"]);
     grunt.registerTask("default", [ "lint", "browserify", "uglify" ]);
+    grunt.registerTask("test", [ "lint", "browserify:test" ]);
 };
