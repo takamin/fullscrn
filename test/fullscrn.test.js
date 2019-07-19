@@ -1,6 +1,8 @@
 "use strict";
 const assert = require("chai").assert;
 const Fullscrn = require("../index.js");
+const initialFullscrnEnabled = Fullscrn.enabled;
+const initialDocumentFullscrnEnabled = document.fullscreenEnabled;
 const btnContinue = document.querySelector("#btnContinue");
 const waitButtonClick = (caption, onclick) => {
     return new Promise(resolve => {
@@ -16,8 +18,8 @@ const waitButtonClick = (caption, onclick) => {
 };
 describe("Fullscrn", () => {
     describe(".enabled", ()=>{
-        it("should be true after module loaded", () => {
-            assert.isTrue(Fullscrn.enabled);
+        it("should be true after module loaded(assume testing in modern browser)", () => {
+            assert.isTrue(initialFullscrnEnabled);
         });
     });
     describe(".element", () => {
@@ -45,8 +47,8 @@ describe("Fullscrn", () => {
     });
     describe("DOM injection", () => {
         describe("Document#fullscreenEnabled", ()=>{
-            it("should be true after module loaded", () => {
-                assert.isTrue(document.fullscreenEnabled);
+            it("should be true after module loaded(assume testing in modern browser)", () => {
+                assert.isTrue(initialDocumentFullscrnEnabled);
             });
         });
         describe("Document#fullscreenElement", ()=>{
