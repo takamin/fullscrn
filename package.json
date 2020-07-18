@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "grunt",
-    "test": "grunt && http-server -p 8080 -c-1 -o http://localhost:8080/test/index.html"
+    "test": "grunt && http-server -p 8080 -c-1 -o /test/index.html"
   },
   "keywords": [
     "fullscreen",
