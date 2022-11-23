@@ -28,7 +28,7 @@
     "grunt-eslint": "^23.0.0",
     "http-server": "^0.12.3",
     "load-grunt-tasks": "^5.1.0",
-    "mocha": "^8.2.1"
+    "mocha": "^10.1.0"
   },
   "browser": {
     "document-ready": "./lib/document-ready.js"
