@@ -48,6 +48,6 @@
     "extends": "eslint:recommended"
   },
   "dependencies": {
-    "debug": "^4.3.7"
+    "debug": "^4.4.3"
   }
 }
